@@ -111,8 +111,8 @@ def parse(url):
 if __name__ == '__main__':
     with ThreadPoolExecutor(max_workers=39) as executor:
             for start_url in start_urls:
-                asin, today_date, amazon_price, total_offer_count, lowest_price = executor.submit(parse, start_url)
-                print asin, today_date, amazon_price, total_offer_count, lowest_price
+                result = executor.submit(parse, start_url)
+                print result
                 
 #      for start_url in start_urls:
 #          parse(start_url)
