@@ -5,7 +5,7 @@ from datetime import datetime
 from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
 import grequests
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
 
 start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref=zg_bs_nav_0',
