@@ -5,10 +5,10 @@ from datetime import datetime
 from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
 import grequests
-from concurrent.futures import ProcessPoolExecutor()
+from concurrent.futures import ProcessPoolExecutor
 
 
-start_urls = 'http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref=zg_bs_nav_0',
+start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Appstore-Android/zgbs/mobile-apps/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Arts-Crafts-Sewing/zgbs/arts-crafts/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Automotive/zgbs/automotive/ref=zg_bs_nav_0',
@@ -46,7 +46,7 @@ start_urls = 'http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref=
 'http://www.amazon.com/Best-Sellers-Sports-Collectibles/zgbs/sports-collectibles/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Toys-Games/zgbs/toys-and-games/ref=zg_bs_nav_0',
 'http://www.amazon.com/best-sellers-video-games/zgbs/videogames/ref=zg_bs_nav_0',
-'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0'
+'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 pool = Pool(cpu_count() * 20)
 
 def scrape(response, **kwargs):
