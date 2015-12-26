@@ -74,7 +74,8 @@ def scrape(response, **kwargs):
             except:
                 pass
             today_date = str(datetime.now())
-            scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price})
+            return asin, today_date, amazon_price, total_offer_count, lowest_price
+        #     scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price})
 
 
 def multiparse(links):
@@ -110,7 +111,8 @@ def parse(url):
 if __name__ == '__main__':
     with ThreadPoolExecutor(max_workers=39) as executor:
             for start_url in start_urls:
-                executor.submit(parse, start_url)
-        
+                asin, today_date, amazon_price, total_offer_count, lowest_price = executor.submit(parse, start_url)
+                print asin, today_date, amazon_price, total_offer_count, lowest_price
+                
 #      for start_url in start_urls:
 #          parse(start_url)
