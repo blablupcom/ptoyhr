@@ -109,6 +109,8 @@ def parse(url):
 
 if __name__ == '__main__':
     with ThreadPoolExecutor(max_workers=39) as executor:
-        executor.submit(parse, start_urls)
+            for start_url in start_urls:
+                executor.submit(parse, start_url)
+        
 #      for start_url in start_urls:
 #          parse(start_url)
