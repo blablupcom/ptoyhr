@@ -5,6 +5,8 @@ from datetime import datetime
 from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
 import grequests
+from concurrent.futures import ProcessPoolExecutor()
+
 
 start_urls = 'http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Appstore-Android/zgbs/mobile-apps/ref=zg_bs_nav_0',
@@ -106,5 +108,7 @@ def parse(url):
 
 
 if __name__ == '__main__':
-     for start_url in start_urls:
-         parse(start_url)
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        executor.submit(parse, start_urls)
+#      for start_url in start_urls:
+#          parse(start_url)
