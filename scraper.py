@@ -98,10 +98,12 @@ def parse(url):
                 async_list = []
                 for i in xrange(1, 6):
                     print (asin+'?&pg={}'.format(i))
-                    rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
-                    async_list.append(rs)
+                    rs = requests.get(asin+'?&pg={}'.format(i))
+                    scrape(rs)
+                #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
+                #     async_list.append(rs)
                 parse(asin)
-                grequests.map(async_list)
+                # grequests.map(async_list)
 
 
     except:
