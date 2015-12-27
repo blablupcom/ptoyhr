@@ -49,32 +49,32 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 pool = Pool(cpu_count() * 20)
 
-def scrape(response, **kwargs):
-        listing_soup = bs(response.text, 'lxml')
-        asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
-        for asin_num in asin_nums:
-            asin = ''
-            try:
-                asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
-            except:
-                pass
-            amazon_price = ''
-            try:
-                amazon_price = asin_num.find('strong', 'price').text.strip()
-            except:
-                pass
-            total_offer_count = ''
-            try:
-                total_offer_count = asin_num.find('div', 'zg_usedPrice').find('a').text.strip().split(u'\xa0')[0].replace('used & new', '')
-            except:
-                pass
-            lowest_price = ''
-            try:
-                lowest_price = asin_num.find('div', 'zg_usedPrice').find('span', 'price').text.strip()
-            except:
-                pass
-            today_date = str(datetime.now())
-            return asin, today_date, amazon_price, total_offer_count, lowest_price
+# def scrape(response, **kwargs):
+#         listing_soup = bs(response.text, 'lxml')
+#         asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
+#         for asin_num in asin_nums:
+#             asin = ''
+#             try:
+#                 asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
+#             except:
+#                 pass
+#             amazon_price = ''
+#             try:
+#                 amazon_price = asin_num.find('strong', 'price').text.strip()
+#             except:
+#                 pass
+#             total_offer_count = ''
+#             try:
+#                 total_offer_count = asin_num.find('div', 'zg_usedPrice').find('a').text.strip().split(u'\xa0')[0].replace('used & new', '')
+#             except:
+#                 pass
+#             lowest_price = ''
+#             try:
+#                 lowest_price = asin_num.find('div', 'zg_usedPrice').find('span', 'price').text.strip()
+#             except:
+#                 pass
+#             today_date = str(datetime.now())
+#             return asin, today_date, amazon_price, total_offer_count, lowest_price
         #     scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price})
 
 
@@ -97,12 +97,37 @@ def parse(url):
             for asin in asins:
                 async_list = []
                 for i in xrange(1, 6):
-                    print (asin+'?&pg={}'.format(i))
-                    rs = requests.get(asin+'?&pg={}'.format(i))
-                    scrape(rs)
+                        print (asin+'?&pg={}'.format(i))
+                        rs = requests.get(asin+'?&pg={}'.format(i))
+                        listing_soup = bs(rs.text, 'lxml')
+                        asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
+                        for asin_num in asin_nums:
+                            asin = ''
+                            try:
+                                asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
+                            except:
+                                pass
+                            amazon_price = ''
+                            try:
+                                amazon_price = asin_num.find('strong', 'price').text.strip()
+                            except:
+                                pass
+                            total_offer_count = ''
+                            try:
+                                total_offer_count = asin_num.find('div', 'zg_usedPrice').find('a').text.strip().split(u'\xa0')[0].replace('used & new', '')
+                            except:
+                                pass
+                            lowest_price = ''
+                            try:
+                                lowest_price = asin_num.find('div', 'zg_usedPrice').find('span', 'price').text.strip()
+                            except:
+                                pass
+                            today_date = str(datetime.now())
+                            return asin, today_date, amazon_price, total_offer_count, lowest_price
+                    
                 #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
                 #     async_list.append(rs)
-                parse(asin)
+                # parse(asin)
                 # grequests.map(async_list)
 
 
