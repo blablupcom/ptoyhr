@@ -2,7 +2,6 @@ import sys
 import requests
 from bs4 import BeautifulSoup as bs
 import re
-from mutagen.mp3 import MP3
 from urllib import urlretrieve
 import json
 import math
