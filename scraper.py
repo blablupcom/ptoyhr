@@ -51,9 +51,9 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 import urllib2
 
 def parse(url):
-    page = urllib2.urlopen(url).read()
-    # page = requests.get(url)
-    soup = bs(page, 'lxml')
+    # page = urllib2.urlopen(url).read()
+    page = requests.get(url)
+    soup = bs(page.text, 'lxml')
 
     try:
         active_sel = soup.find('span', 'zg_selected').find_next()
@@ -70,8 +70,8 @@ def parse(url):
 
                 for i in xrange(1, 6):
                         print (l+'?&pg={}'.format(i))
-                        rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
-                        listing_soup = bs(rs, 'lxml')
+                        rs = requests.get(l+'?&pg={}'.format(i))
+                        listing_soup = bs(rs.text, 'lxml')
                         asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
                         for asin_num in asin_nums:
                             asin = ''
