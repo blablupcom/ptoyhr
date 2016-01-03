@@ -49,8 +49,6 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 
 
 import urllib2
-import threading
-# csv_writer_lock = threading.Lock()
 
 def parse(url):
     page = urllib2.urlopen(url).read()
@@ -113,4 +111,6 @@ if __name__ == '__main__':
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         p = executor.map(parse, start_urls)
+        for t in p:
+            print t
     
