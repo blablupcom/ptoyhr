@@ -51,7 +51,10 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 import urllib2
 
 def parse(url):
-    page = urllib2.urlopen(url).read()
+    try:
+        page = urllib2.urlopen(url).read()
+    except:
+        parse(url)
     # page = requests.get(url)
     soup = bs(page, 'lxml')
 
