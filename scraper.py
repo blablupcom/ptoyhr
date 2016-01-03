@@ -111,6 +111,6 @@ def parse(url):
 if __name__ == '__main__':
     import concurrent.futures
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=10) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=2) as executor:
         p = executor.map(parse, start_urls)
     
