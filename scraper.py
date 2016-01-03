@@ -51,9 +51,9 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 import urllib2
 
 def parse(url):
-    # page = urllib2.urlopen(url).read()
-    page = requests.get(url)
-    soup = bs(page.text, 'lxml')
+    page = urllib2.urlopen(url).read()
+    # page = requests.get(url)
+    soup = bs(page, 'lxml')
 
     try:
         active_sel = soup.find('span', 'zg_selected').find_next()
@@ -70,8 +70,8 @@ def parse(url):
 
                 for i in xrange(1, 6):
                         print (l+'?&pg={}'.format(i))
-                        rs = requests.get(l+'?&pg={}'.format(i))
-                        listing_soup = bs(rs.text, 'lxml')
+                        rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
+                        listing_soup = bs(rs, 'lxml')
                         asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
                         for asin_num in asin_nums:
                             asin = ''
@@ -95,11 +95,16 @@ def parse(url):
                             except:
                                 pass
                             today_date = str(datetime.now())
-                            # print asin, amazon_price
+                            print asin, amazon_price
                             # return asin, amazon_price
 
                             scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
-                parse(l)
+                # print asin
+                # parse(l)
+                #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
+                #     async_list.append(rs)
+                # parse(asin)
+                # grequests.map(async_list)
 
 
     except:
@@ -107,10 +112,8 @@ def parse(url):
 
 
 if __name__ == '__main__':
-    import concurrent.futures
+    import gevent
+    import gevent.monkey; gevent.monkey.patch_all()
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-        p = executor.map(parse, start_urls)
-        for t in p:
-            print t
-    
+    threads = [gevent.spawn(parse, i) for i in start_urls]
+    gevent.joinall(threads)
