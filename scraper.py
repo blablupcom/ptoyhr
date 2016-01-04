@@ -48,12 +48,13 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 
 
-def parse(response, **kwargs):
 
-    page = response.text
+def parse(url):
+    #
+    # page = response.text
 
-    # page = requests.get(url)
-    soup = bs(page, 'lxml')
+    page = requests.get(url)
+    soup = bs(page.text, 'lxml')
 
     try:
         active_sel = soup.find('span', 'zg_selected').find_next()
@@ -95,13 +96,13 @@ def parse(response, **kwargs):
                             except:
                                 pass
                             today_date = str(datetime.now())
-                            # print asin, amazon_price
+                            print asin, amazon_price
                             # return asin, amazon_price
 
-                            scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
+                            # scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
                 # print asin
-                p = grequests.get(l)
-                parse(p)
+
+                parse(l)
                 #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
                 #     async_list.append(rs)
                 # parse(asin)
@@ -113,8 +114,10 @@ def parse(response, **kwargs):
 import grequests
 
 if __name__ == '__main__':
-    sites = []
+    threads = []
     for u in start_urls:
-        rs = grequests.get(u, hooks=dict(response=parse))
-        job = grequests.send(rs, grequests.Pool(39))
-    # grequests.map(sites)
+        t = threading.Thread(target=parse, args=(u,))
+        t.start()
+        threads.append(t)
+    for t in threads:
+        t.join()
