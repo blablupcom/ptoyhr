@@ -101,10 +101,10 @@ def parse(url):
                             except:
                                 pass
                             today_date = str(datetime.now())
-                            print asin, amazon_price
+                            # print asin, amazon_price
                             # return asin, amazon_price
 
-                            # scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
+                            scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
                 # print asin
 
                 parse(l)
