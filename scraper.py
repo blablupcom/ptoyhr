@@ -116,5 +116,5 @@ if __name__ == '__main__':
     sites = []
     for u in start_urls:
         rs = grequests.get(u, hooks=dict(response=parse))
-        sites.append(rs)
-    grequests.map(sites)
+        job = grequests.send(req, grequests.Pool(39))
+    # grequests.map(sites)
