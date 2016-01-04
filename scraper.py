@@ -48,13 +48,13 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 
 
-import urllib2
+iimport unirest
+# csv_writer_lock = threading.Lock()
 
-def parse(url):
-    try:
-        page = urllib2.urlopen(url).read()
-    except:
-        parse(url)
+def parse(response):
+
+    page = response.raw_body
+
     # page = requests.get(url)
     soup = bs(page, 'lxml')
 
@@ -98,12 +98,12 @@ def parse(url):
                             except:
                                 pass
                             today_date = str(datetime.now())
-                            # print asin, amazon_price
+                            print asin, amazon_price
                             # return asin, amazon_price
 
                             scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
                 # print asin
-                parse(l)
+                # parse(l)
                 #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
                 #     async_list.append(rs)
                 # parse(asin)
@@ -111,12 +111,9 @@ def parse(url):
 
 
     except:
-        parse(url)
+        pass
 
 
 if __name__ == '__main__':
-    import gevent
-    import gevent.monkey; gevent.monkey.patch_all()
-
-    threads = [gevent.spawn(parse, i) for i in start_urls]
-    gevent.joinall(threads)
+    for url in start_urls:
+        thread = unirest.get(url, callback=parse)
