@@ -80,6 +80,7 @@ def parse(url):
                                 asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
                             except:
                                 pass
+                            print asin
                             amazon_price = ''
                             try:
                                 amazon_price = asin_num.find('strong', 'price').text.strip()
