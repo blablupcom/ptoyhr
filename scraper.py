@@ -76,6 +76,7 @@ def scrape(url):
             except:
                 pass
             today_date = str(datetime.now())
+            return asin
             # return asin, today_date, amazon_price, total_offer_count, lowest_price
             scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price})
 
@@ -103,7 +104,8 @@ def parse(url):
 
                 # for i in xrange(1, 6):
                         print (l+'?&pg={}'.format(i))
-                        [pool.imap(scrape, l+'?&pg={}'.format(i) for i in range(1, 6))]
+                        for asin in pool.imap(scrape, l+'?&pg={}'.format(i) for i in range(1, 6)):
+                                print asin
                         parse(l)
                 #         rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
                 #         listing_soup = bs(rs, 'lxml')
