@@ -119,6 +119,6 @@ def parse(url):
 import grequests
 
 if __name__ == '__main__':
-            pool = Pool(cpu_count() * 2)
+            pool = Pool(cpu_count() * 1)
             asins = pool.map(parse, start_urls)
             # for asin_link in asins:
