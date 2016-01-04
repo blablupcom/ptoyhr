@@ -49,12 +49,17 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 
 
 
+from eventlet.green import urllib2
+import threading
+import unirest
+# csv_writer_lock = threading.Lock()
+
 def parse(url):
     #
     # page = response.text
+    page = urllib2.urlopen(url).read()
 
-    page = requests.get(url)
-    soup = bs(page.text, 'lxml')
+    soup = bs(page, 'lxml')
 
     try:
         active_sel = soup.find('span', 'zg_selected').find_next()
@@ -71,8 +76,8 @@ def parse(url):
 
                 for i in xrange(1, 6):
                         print (l+'?&pg={}'.format(i))
-                        rs = requests.get(l+'?&pg={}'.format(i)).read()
-                        listing_soup = bs(rs.text, 'lxml')
+                        rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
+                        listing_soup = bs(rs, 'lxml')
                         asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
                         for asin_num in asin_nums:
                             asin = ''
@@ -80,7 +85,6 @@ def parse(url):
                                 asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
                             except:
                                 pass
-                            print asin
                             amazon_price = ''
                             try:
                                 amazon_price = asin_num.find('strong', 'price').text.strip()
@@ -112,13 +116,11 @@ def parse(url):
 
     except:
         pass
-import threading
+import grequests
 
 if __name__ == '__main__':
-    threads = []
-    for u in start_urls:
-        t = threading.Thread(target=parse, args=(u,))
-        t.start()
-        threads.append(t)
-    # for t in threads:
-    #     t.join()
+    import eventlet
+
+    pool = eventlet.GreenPool(200)
+    for url, body in pool.imap(parse, start_urls):
+         print("got body from", url, "of length", len(body))
