@@ -121,6 +121,6 @@ import grequests
 if __name__ == '__main__':
     import eventlet
 
-    pool = eventlet.GreenPool(200)
+    pool = eventlet.GreenPool(39)
     for url, body in pool.imap(parse, start_urls):
          print("got body from", url, "of length", len(body))
