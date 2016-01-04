@@ -108,6 +108,6 @@ def parse(url):
         parse(url)
 
 if __name__ == '__main__':
-    for start url in start_urls:
+    for start_url in start_urls:
         parse(start_url)
           
