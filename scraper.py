@@ -2,10 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 import scraperwiki
 from datetime import datetime
-from multiprocessing.dummy import Pool
-from multiprocessing import cpu_count
-from concurrent.futures import ThreadPoolExecutor
-
+import urllib2
 
 start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Appstore-Android/zgbs/mobile-apps/ref=zg_bs_nav_0',
@@ -48,15 +45,8 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 
 
-
-from eventlet.green import urllib2
-import threading
-import unirest
-# csv_writer_lock = threading.Lock()
-
 def parse(url):
-    #
-    # page = response.text
+
     page = urllib2.urlopen(url).read()
 
     soup = bs(page, 'lxml')
@@ -115,10 +105,9 @@ def parse(url):
 
 
     except:
-        pass
-import grequests
+        parse(url)
 
 if __name__ == '__main__':
-            pool = Pool(cpu_count() * 1)
-            asins = pool.map(parse, start_urls)
-            # for asin_link in asins:
+    for start url in start_urls:
+        parse(start_url)
+          
