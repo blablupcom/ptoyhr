@@ -103,7 +103,7 @@ def parse(url):
 
                 # for i in xrange(1, 6):
                         print (l+'?&pg={}'.format(i))
-                        pool.imap(scrape, l+'?&pg={}'.format(i) for i in range(1, 6))
+                        [pool.imap(scrape, l+'?&pg={}'.format(i) for i in range(1, 6))]
                         parse(l)
                 #         rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
                 #         listing_soup = bs(rs, 'lxml')
