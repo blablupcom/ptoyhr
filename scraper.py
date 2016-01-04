@@ -4,6 +4,11 @@ import scraperwiki
 from datetime import datetime
 import urllib2
 
+import eventlet
+from eventlet.green import urllib2
+pool = eventlet.GreenPool()
+
+
 start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Appstore-Android/zgbs/mobile-apps/ref=zg_bs_nav_0',
 'http://www.amazon.com/Best-Sellers-Arts-Crafts-Sewing/zgbs/arts-crafts/ref=zg_bs_nav_0',
@@ -45,6 +50,38 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 
 
+def scrape(url):
+        body = urllib2.urlopen(url).read()
+        listing_soup = bs(body, 'lxml')
+        asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
+        for asin_num in asin_nums:
+            asin = ''
+            try:
+                asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
+            except:
+                pass
+            amazon_price = ''
+            try:
+                amazon_price = asin_num.find('strong', 'price').text.strip()
+            except:
+                pass
+            total_offer_count = ''
+            try:
+                total_offer_count = asin_num.find('div', 'zg_usedPrice').find('a').text.strip().split(u'\xa0')[0].replace('used & new', '')
+            except:
+                pass
+            lowest_price = ''
+            try:
+                lowest_price = asin_num.find('div', 'zg_usedPrice').find('span', 'price').text.strip()
+            except:
+                pass
+            today_date = str(datetime.now())
+            # return asin, today_date, amazon_price, total_offer_count, lowest_price
+            scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price})
+
+
+
+
 def parse(url):
 
     page = urllib2.urlopen(url).read()
@@ -57,45 +94,46 @@ def parse(url):
             links_lists= active_sel.find_all('li')
 
             for links in links_lists:
-                l = links.find('a')['href'].encode('utf-8')
-                print l
+                        l = links.find('a')['href'].encode('utf-8')
+                        print l
                 # link_lists.append(l)
 
             # asins = pool.map(multiparse, links_lists)
             # for asin_link in asins:
 
-                for i in xrange(1, 6):
+                # for i in xrange(1, 6):
                         print (l+'?&pg={}'.format(i))
-                        rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
-                        listing_soup = bs(rs, 'lxml')
-                        asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
-                        for asin_num in asin_nums:
-                            asin = ''
-                            try:
-                                asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
-                            except:
-                                pass
-                            amazon_price = ''
-                            try:
-                                amazon_price = asin_num.find('strong', 'price').text.strip()
-                            except:
-                                pass
-                            total_offer_count = ''
-                            try:
-                                total_offer_count = asin_num.find('div', 'zg_usedPrice').find('a').text.strip().split(u'\xa0')[0].replace('used & new', '')
-                            except:
-                                pass
-                            lowest_price = ''
-                            try:
-                                lowest_price = asin_num.find('div', 'zg_usedPrice').find('span', 'price').text.strip()
-                            except:
-                                pass
-                            today_date = str(datetime.now())
-                            # print asin, amazon_price
-                            # return asin, amazon_price
+                        pool.imap(scrape, l+'?&pg={}'.format(i) for i in range(1, 6))
+                #         rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
+                #         listing_soup = bs(rs, 'lxml')
+                #         asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
+                #         for asin_num in asin_nums:
+                #             asin = ''
+                #             try:
+                #                 asin = asin_num.find('a')['href'].split('dp/')[-1].strip()
+                #             except:
+                #                 pass
+                #             amazon_price = ''
+                #             try:
+                #                 amazon_price = asin_num.find('strong', 'price').text.strip()
+                #             except:
+                #                 pass
+                #             total_offer_count = ''
+                #             try:
+                #                 total_offer_count = asin_num.find('div', 'zg_usedPrice').find('a').text.strip().split(u'\xa0')[0].replace('used & new', '')
+                #             except:
+                #                 pass
+                #             lowest_price = ''
+                #             try:
+                #                 lowest_price = asin_num.find('div', 'zg_usedPrice').find('span', 'price').text.strip()
+                #             except:
+                #                 pass
+                #             today_date = str(datetime.now())
+                #             # print asin, amazon_price
+                #             # return asin, amazon_price
 
-                            scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
-                # print asin
+                #             scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
+                # # print asin
 
                 parse(l)
                 #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
