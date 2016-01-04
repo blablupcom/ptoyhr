@@ -119,8 +119,6 @@ def parse(url):
 import grequests
 
 if __name__ == '__main__':
-    import eventlet
-
-    pool = eventlet.GreenPool(39)
-    for url, body in pool.imap(parse, start_urls):
-         print("got body from", url, "of length", len(body))
+            pool = Pool(cpu_count() * 20)
+            asins = pool.map(parse, start_urls)
+            # for asin_link in asins:
