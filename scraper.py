@@ -111,7 +111,7 @@ def parse(url):
 
     except:
         pass
-import grequests
+import threading
 
 if __name__ == '__main__':
     threads = []
