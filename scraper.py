@@ -104,6 +104,7 @@ def parse(url):
                 # for i in xrange(1, 6):
                         print (l+'?&pg={}'.format(i))
                         pool.imap(scrape, l+'?&pg={}'.format(i) for i in range(1, 6))
+                        parse(l)
                 #         rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
                 #         listing_soup = bs(rs, 'lxml')
                 #         asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
@@ -135,7 +136,7 @@ def parse(url):
                 #             scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
                 # # print asin
 
-                parse(l)
+                
                 #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
                 #     async_list.append(rs)
                 # parse(asin)
