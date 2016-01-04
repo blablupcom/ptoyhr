@@ -48,7 +48,7 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 
 
-iimport unirest
+import unirest
 # csv_writer_lock = threading.Lock()
 
 def parse(response):
