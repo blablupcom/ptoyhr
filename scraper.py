@@ -48,12 +48,9 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 'http://www.amazon.com/Best-Sellers-Watches/zgbs/watches/ref=zg_bs_nav_0']
 
 
-import unirest
-# csv_writer_lock = threading.Lock()
+def parse(response, **kwargs):
 
-def parse(response):
-
-    page = response.raw_body
+    page = response.text
 
     # page = requests.get(url)
     soup = bs(page, 'lxml')
@@ -103,7 +100,8 @@ def parse(response):
 
                             scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price, 'link': l+'?&pg={}'.format(i)})
                 # print asin
-                # parse(l)
+                p = grequests.get(l)
+                parse(p)
                 #     rs = (grequests.get(asin+'?&pg={}'.format(i), hooks = {'response' : scrape}))
                 #     async_list.append(rs)
                 # parse(asin)
@@ -112,8 +110,11 @@ def parse(response):
 
     except:
         pass
-
+import grequests
 
 if __name__ == '__main__':
-    for url in start_urls:
-        thread = unirest.get(url, callback=parse)
+    sites = []
+    for u in start_urls:
+        rs = grequests.get(u, hooks=dict(response=parse))
+        sites.append(rs)
+    grequests.map(sites)
