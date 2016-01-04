@@ -101,10 +101,11 @@ def parse(url):
 
             # asins = pool.map(multiparse, links_lists)
             # for asin_link in asins:
-
-                # for i in xrange(1, 6):
-                        print (l+'?&pg={}'.format(i))
-                        for asin in pool.imap(scrape, l+'?&pg={}'.format(i) for i in range(1, 6)):
+                        url_links = []
+                        for i in xrange(1, 6):
+                            print (l+'?&pg={}'.format(i))
+                            url_links.append(l+'?&pg={}'.format(i))
+                        for asin in pool.imap(scrape, url_links):
                                 print asin
                         parse(l)
                 #         rs = urllib2.urlopen(l+'?&pg={}'.format(i)).read()
