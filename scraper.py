@@ -51,6 +51,7 @@ start_urls = ['http://www.amazon.com/Best-Sellers-Appliances/zgbs/appliances/ref
 
 
 def scrape(url):
+        print url
         body = urllib2.urlopen(url).read()
         listing_soup = bs(body, 'lxml')
         asin_nums = listing_soup.find_all('div', 'zg_itemImmersion')
@@ -103,7 +104,7 @@ def parse(url):
             # for asin_link in asins:
                         url_links = []
                         for i in xrange(1, 6):
-                            print (l+'?&pg={}'.format(i))
+                        #     print (l+'?&pg={}'.format(i))
                             url_links.append(l+'?&pg={}'.format(i))
                         for asin, today_date, amazon_price, total_offer_count, lowest_price in pool.imap(scrape, url_links):
                                 scraperwiki.sqlite.save(unique_keys=['Date'], data={'ASIN': asin, 'Date': today_date, 'Amazon Price': amazon_price, 'Total Offer Count': total_offer_count, 'Lowest Price': lowest_price})
