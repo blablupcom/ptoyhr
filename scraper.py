@@ -48,7 +48,8 @@ def scrape_page(base_url):
                     # except:
                     #     duration = ''
                     print movie_link.encode('utf-8'), movie_name.encode('utf-8'), transcript.encode('utf-8'),  file_type.encode('utf-8'), file_url.encode('utf-8'), categories.encode('utf-8'), image_url.encode('utf-8')
-                    yield movie_link, movie_name, transcript,  file_type, file_url, categories, image_url
+                #     yield movie_link, movie_name, transcript,  file_type, file_url, categories, image_url
+                    scraperwiki.sqlite.save(unique_keys=["fileUrl"], data={"fileUrl": file_url.encode('utf-8'), 'sourceUrl': movie_link.encode('utf-8'), 'movie name': movie_name.encode('utf-8'), 'transcript':transcript.encode('utf-8'),  'fileType': file_type.encode('utf-8'), 'categories':categories.encode('utf-8'), 'imageUrl':image_url.encode('utf-8')
 
                 next_link = ''
                 try:
