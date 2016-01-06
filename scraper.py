@@ -1,4 +1,4 @@
-iimport requests
+import requests
 from bs4 import BeautifulSoup as bs
 import re
 from mutagen.mp3 import MP3
