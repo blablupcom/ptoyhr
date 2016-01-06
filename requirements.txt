@@ -10,4 +10,5 @@ lxml==3.4.4
 cssselect==0.9.1
 futures
 unirest
+mutagen
 eventlet
