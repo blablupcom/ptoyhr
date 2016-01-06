@@ -62,29 +62,26 @@ def scrape_page(base_url):
                 #     continue
                 # else:
                 #     break
-
-
-
 def scrape():
    with open('data7.json', 'w') as outfile:
         sounds = {}
         lists = []
         base_url = 'http://www.dailywav.com/archives/shows/'
         s = scrape_page(base_url)
-        for l in s:
-            json_dic = {}
-            json_dic['sourceUrl']=l[0]
-            json_dic['movie name']=l[1]
-            json_dic['transcript']=l[2]
-            json_dic['fileType']=l[3]
-            json_dic['fileUrl']=l[4]
-            # json_dic['duration']=l[6]
-            json_dic['categories']=l[5]
-            json_dic['imageUrl']=l[5]
-            print json_dic['movie name']
-            lists.append(json_dic)
-        sounds['sounds'] = lists
-        json.dump(sounds, outfile, indent = 4)
+        # for l in s:
+        #     json_dic = {}
+        #     json_dic['sourceUrl']=l[0]
+        #     json_dic['movie name']=l[1]
+        #     json_dic['transcript']=l[2]
+        #     json_dic['fileType']=l[3]
+        #     json_dic['fileUrl']=l[4]
+        #     # json_dic['duration']=l[6]
+        #     json_dic['categories']=l[5]
+        #     json_dic['imageUrl']=l[5]
+        #     print json_dic['movie name']
+        #     lists.append(json_dic)
+        # sounds['sounds'] = lists
+        # json.dump(sounds, outfile, indent = 4)
 
 
 
