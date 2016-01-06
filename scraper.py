@@ -51,17 +51,17 @@ def scrape_page(base_url):
                 #     yield movie_link, movie_name, transcript,  file_type, file_url, categories, image_url
                     scraperwiki.sqlite.save(unique_keys=["fileUrl"], data={"fileUrl": file_url.encode('utf-8'), 'sourceUrl': movie_link.encode('utf-8'), 'movie name': movie_name.encode('utf-8'), 'transcript':transcript.encode('utf-8'),  'fileType': file_type.encode('utf-8'), 'categories':categories.encode('utf-8'), 'imageUrl':image_url.encode('utf-8')
 
-                next_link = ''
-                try:
-                    next_link = movie_soup.find('li', 'pager-next').find('a')['href']
-                except:
-                    pass
-                if next_link:
-                    movie_page = requests.get('http://www.dailywav.com'+next_link)
-                    movie_soup = bs(movie_page.text, 'lxml')
-                    continue
-                else:
-                    break
+                # next_link = ''
+                # try:
+                #     next_link = movie_soup.find('li', 'pager-next').find('a')['href']
+                # except:
+                #     pass
+                # if next_link:
+                #     movie_page = requests.get('http://www.dailywav.com'+next_link)
+                #     movie_soup = bs(movie_page.text, 'lxml')
+                #     continue
+                # else:
+                #     break
 
 
 
