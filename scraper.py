@@ -47,7 +47,7 @@ def scrape_page(base_url):
                     #     duration = length
                     # except:
                     #     duration = ''
-                    print movie_link, movie_name, transcript,  file_type, file_url, categories, image_url
+                    print movie_link.encode('utf-8'), movie_name.encode('utf-8'), transcript.encode('utf-8'),  file_type.encode('utf-8'), file_url.encode('utf-8'), categories.encode('utf-8'), image_url.encode('utf-8')
                     yield movie_link, movie_name, transcript,  file_type, file_url, categories, image_url
 
                 next_link = ''
