@@ -52,7 +52,7 @@ def scrape_page(base_url):
 
                 next_link = ''
                 try:
-                    next_link = movie_soup.find('li', 'pager-next').find('a')
+                    next_link = movie_soup.find('li', 'pager-next').find('a')['href']
                 except:
                     pass
                 if next_link:
